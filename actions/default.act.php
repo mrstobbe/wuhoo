@@ -11,11 +11,13 @@ class DefaultAction extends Action {
 	];
 
 	public function execute() {
+		//Essentially just serves up the main html
+
 		if ($this->path !== '/')
 			return $this->respNotFound();
 
 		return $this->respSuccess();
-	}
+	} //execute()
 } //class DefaultAction
 
 Action::register('DefaultAction', __FILE__);

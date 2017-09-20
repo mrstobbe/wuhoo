@@ -5,6 +5,19 @@ abstract class ServiceDriver {
 	static protected $allByID = [ ];
 	static protected $availByID = [ ];
 
+	public $app = null;
+
+	public function __construct(App $app) {
+		$this->app = $app;
+	} //__construct()
+
+	static public function getService(App $app, $id) {
+		if (!isset(self::$availByID[$id]))
+			return null;
+		$handler = self::$availByID[$id];
+		return new $handler($app);
+	} //getService()
+
 	static public function loadAll(App $app, $path) {
 		if ($path[strlen($path) - 1] !== '/')
 			$path .= '/';

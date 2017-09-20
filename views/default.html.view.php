@@ -26,7 +26,7 @@ $zip = $resp->param('zip');
 				<select name="provider" id="inpProvider">
 					<option value="mean"<?= ($provider === null) ? ' selected' : '' ?>>Average of all</option>
 					<?php foreach($providers as $id=>$name): ?>
-						<option id="<?= Util::htmlEnc($id) ?>"<?= ($provider === $id) ? ' selected' : '' ?>><?= Util::htmlEnc($name) ?></option>
+						<option value="<?= Util::htmlEnc($id) ?>"<?= ($provider === $id) ? ' selected' : '' ?>><?= Util::htmlEnc($name) ?></option>
 					<?php endforeach; ?>
 				</select>
 			</span>

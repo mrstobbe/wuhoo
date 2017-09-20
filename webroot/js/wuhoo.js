@@ -63,7 +63,7 @@ function handleSubmit(e) {
 	}
 	setWorking();
 	var xhr = wuhoo.xhr = new XMLHttpRequest();
-	xhr.open('GET', '/api/query/provider=' + encodeURIComponent(provider) + '/zip=' + encodeURIComponent(zip) + '.json', true);
+	xhr.open('GET', '/query/provider=' + encodeURIComponent(provider) + '/zip=' + encodeURIComponent(zip) + '.json', true);
 	xhr.onerror = function(e) {
 		setError('API Error: Could not make request');
 		clearWorking();

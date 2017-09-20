@@ -52,6 +52,9 @@ abstract class Action {
 		return $this->respError(404, 'Unknown request');
 	} //respNotFound()
 
+	protected function respBadParam($msg) {
+		return $this->respError(418, $msg);
+	} //respBadParam()
 
 	public function param($key, $default = null) {
 		return (isset($this->params[$key])) ? $this->params[$key] : $default;

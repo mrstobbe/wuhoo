@@ -92,8 +92,8 @@ class App {
 			$viewID = $resp->action;
 		}
 		$content = $this->render($resp, $viewID, $fmt);
-		if ($req->resp['code'] !== 200)
-			header('HTTP/1.1 ' . $req->resp['code'] . ' ' . $req->resp['error']);
+		if ($resp->respCode !== 200)
+			header('HTTP/1.1 ' . $resp->respCode . ' ' . $resp->respError);
 		//#TODO: Support things like dynamically gzipping
 		//#TODO: Support client-side caching headers
 		header('Content-Length: ' . strlen($content));
