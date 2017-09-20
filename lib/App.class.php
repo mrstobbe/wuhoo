@@ -38,7 +38,7 @@ class App {
 
 		$this->loadCore();
 		$this->loadConfig();
-		//$this->loadDrivers();
+		$this->loadDrivers();
 	} //__construct()
 
 	static public function init($appDir = null) {
@@ -48,7 +48,7 @@ class App {
 	} //init()
 
 	public function conf($key, $default = null) {
-		$parts = split('.', $key);
+		$parts = explode('.', $key);
 		$ref = &$this->confMap;
 		for ($i = 0, $n = count($parts) - 1; $i !== $n; ++$i) {
 			if ((!isset($ref[$parts[$i]])) || (!is_array($ref[$parts[$i]])))
@@ -155,10 +155,8 @@ class App {
 	protected function loadCore() {
 		require $this->appDir . 'lib/Util.class.php';
 		require $this->appDir . 'lib/Action.class.php';
-		/*
-		require $this->appDir . 'lib/CacheDriver.class.php';
+		//require $this->appDir . 'lib/CacheDriver.class.php';
 		require $this->appDir . 'lib/ServiceDriver.class.php';
-		*/
 	} //loadCore()
 
 	protected function loadConfig() {
@@ -193,10 +191,10 @@ class App {
 		}
 	}
 
-	public function getServiceList() {
-		//#TODO: stubbed
-		return [ ];
-	}
+	protected function loadDrivers() {
+		ServiceDriver::loadAll($this, $this->appDir . 'drivers/service/');
+		//CacheDriver::loadAll($this->appDir . 'drivers/cache/');
+	} //loadDrivers()
 } //class App
 
 return;

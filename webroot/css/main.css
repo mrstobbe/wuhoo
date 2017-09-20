@@ -2,5 +2,85 @@
 body {
 	padding: 0;
 	margin: 0;
+	background-color: #000;
+	font-family: Arial, sans-serif;
+	font-size: 14px;
+	color: #fff;
 }
+
+article {
+	min-width: 300px;
+	max-width: 1000px;
+	margin: 50px auto;
+	background-color: #fff;
+	color: #000;
+	padding: 30px;
+	border-radius: 15px;
+	border: 5px solid #44c;
+}
+
+h1 {
+	font-size: 300%;
+	color: #44c;
+	margin: 0;
+	border-bottom: 1px solid #44c;
+}
+
+p {
+	margin: 1em 0;
+}
+
+.kvpair {
+	margin: 7px 5px;
+}
+
+.kvpair .kvpair-item {
+	display: inline-block;
+	vertical-align: middle;
+	margin: 0;
+}
+
+.kvpair .kvpair-key {
+	font-weight: bold;
+	color: #44c;
+	width: 5em;
+}
+
+.kvpair .kvpair-val {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.kvpair .kvpair-aside {
+	vertical-align: middle;
+	font-size: 75%;
+	color: #888;
+}
+
+#frmQuery {
+	border-bottom: 1px solid #44c;
+	margin-bottom: 10px;
+}
+
+#frmQuery .error-msg {
+	display: none;
+}
+
+#frmQuery.error .error-msg {
+	display: block;
+}
+
+#errMsg {
+	font-size: 125%;
+	font-weight: bold;
+	color: #a00;
+}
+
+#working {
+	font-size: 150%;
+	font-weight: bold;
+	font-style: italic;
+	color: #444;
+}
+
 
