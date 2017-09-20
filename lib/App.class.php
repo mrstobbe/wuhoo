@@ -44,14 +44,18 @@ class App {
 	public function run() {
 		if ($this->isCLI) {
 			//#TODO: enable a generic command-line interface
-			throw new Exception("No command-line interface available");
+			throw new Exception('No command-line interface available');
 		}
-		if (!isset($_SERVER["REQUEST_URI"]))
-			throw new Exception("`REQUEST_URI` not set. Hmmmm... server config issues.");
+		if (!isset($_SERVER['REQUEST_URI']))
+			throw new Exception('`REQUEST_URI` not set. Hmmmm... server config issues.');
+
 
 		//$resp = $this->dispatch($_SERVER["REQUEST_URI"]);
+		$req = Action::resolve($this, $_SERVER['REQUEST_URI']);
 		header("Content-Type: text/plain");
-		var_dump($this->confMap);
+		var_dump($req);
+		while (ob_get_level())
+			ob_end_flush();
 	} //run()
 
 	public function conf($key, $default = null) {
@@ -68,8 +72,8 @@ class App {
 
 	protected function loadCore() {
 		require $this->appDir . 'lib/Util.class.php';
-		/*
 		require $this->appDir . 'lib/Action.class.php';
+		/*
 		require $this->appDir . 'lib/CacheDriver.class.php';
 		require $this->appDir . 'lib/ServiceDriver.class.php';
 		*/
