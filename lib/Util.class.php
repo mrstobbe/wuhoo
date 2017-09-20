@@ -3,6 +3,10 @@
 //#NB: This should be a "namespace", but I hate PHP namespaces
 
 class Util {
+	static function htmlEnc($s) {
+		return htmlentities($s, ENT_COMPAT | ENT_HTML5, 'UTF-8');
+	} //htmlEnc()
+
 	static function merge(array &$dest, $src) {
 		if ((!is_array($src)) && (!is_object($src)))
 			throw new Exception("Cannot merge something that is not a container of key-value pairs");
