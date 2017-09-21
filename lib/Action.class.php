@@ -17,6 +17,7 @@ abstract class Action {
 	public $respCode = null;
 	public $respError = null;
 	public $respResult = null;
+	public $fromCache = false;
 	public $view = null;
 
 
@@ -33,26 +34,28 @@ abstract class Action {
 		$this->params = $reqInfo['params'];
 	} //__construct()
 
+	abstract public function cacheKey();
 	abstract public function execute();
 
 
-	protected function respSuccess(array $data = null) {
+	public function respSuccess(array $data = null, $cached = false) {
 		$this->respCode = 200;
 		$this->respResult = $data;
+		$this->fromCache = $cached;
 		return $this;
 	} //respSuccess()
 
-	protected function respError($code, $msg) {
+	public function respError($code, $msg) {
 		$this->respCode = $code;
 		$this->respError = $msg;
 		return $this;
 	} //respError()
 
-	protected function respNotFound() {
+	public function respNotFound() {
 		return $this->respError(404, 'Unknown request');
 	} //respNotFound()
 
-	protected function respBadParam($msg) {
+	public function respBadParam($msg) {
 		return $this->respError(418, $msg);
 	} //respBadParam()
 

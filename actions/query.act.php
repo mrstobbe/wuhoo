@@ -7,8 +7,15 @@ class QueryAction extends Action {
 			'soft'=>false,
 			'secs'=>30*60
 		],
-		'server'=>false
+		'server'=>30*60
 	];
+
+	public function cacheKey() {
+		$provider = $this->param('provider', 'mean');
+		if (($zip = $this->param('zip') ) === null)
+			return null;
+		return 'query/provider=' . $provider . '/zip=' . $zip;
+	} //cacheKey()
 
 	public function execute() {
 		$provider = $this->param('provider', 'mean');

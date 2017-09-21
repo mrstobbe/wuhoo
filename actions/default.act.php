@@ -7,8 +7,12 @@ class DefaultAction extends Action {
 			'soft'=>true,
 			'secs'=>15*60
 		],
-		'server'=>'infinite'
+		'server'=>true // true means "infinite"
 	];
+
+	public function cacheKey() {
+		return ($this->path !== '/') ? 'default' : null;
+	} //cacheKey()
 
 	public function execute() {
 		//Essentially just serves up the main html

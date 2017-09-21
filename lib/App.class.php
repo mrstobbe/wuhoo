@@ -8,6 +8,8 @@ class App {
 	public $isCLI = false;
 	public $confMap = null;
 
+	public $cacher = null;
+
 	static public $mimeMap = [
 		'html'=>'text/html; charset=UTF-8',
 		'txt'=>'text/plain; charset=UTF-8',
@@ -39,6 +41,8 @@ class App {
 		$this->loadCore();
 		$this->loadConfig();
 		$this->loadDrivers();
+
+		$this->cacher = CacheDriver::getDriver($this);
 	} //__construct()
 
 	static public function init($appDir = null) {
@@ -67,7 +71,6 @@ class App {
 		}
 		if (!isset($_SERVER['REQUEST_URI']))
 			throw new Exception('`REQUEST_URI` not set. Hmmmm... server config issues.');
-
 
 		$resp = $this->dispatch($_SERVER['REQUEST_URI']);
 
@@ -113,6 +116,7 @@ class App {
 				$res = [
 					'statusCode'=>$resp->respCode,
 					'status'=>($resp->respCode === 200) ? 'okay' : 'error',
+					'cached'=>$resp->fromCache
 				];
 				if ($resp->respCode !== 200)
 					$res['error'] = $resp->respError;
@@ -132,6 +136,38 @@ class App {
 		]);
 	} //render()
 
+	public function dispatch($reqURI) {
+		$reqInfo = Action::resolve($this, $reqURI);
+		$handler = $reqInfo['handler'];
+		$req = new $handler($this, $reqInfo);
+		$cacheKey = $req->cacheKey();
+		$canCache = (($handler::$caching['server'] !== false) && ($cacheKey !== null));
+		if (($canCache) && (($resp = $this->cacheGet($cacheKey)) !== null)) {
+			$req->respSuccess($resp, true);
+			return $req;
+		}
+		$req->execute();
+		if (($canCache) && ($req->respCode === 200))
+			$this->cacheSet($cacheKey, $req->respResult, ($handler::$caching['server'] === true) ? null : $handler::$caching['server']);
+		return $req;
+	} //reqURI
+
+	public function cacheExists($key) {
+		return $this->cacher->exists($key);
+	} //cacheExists()
+
+	public function cacheGet($key, $default = null) {
+		return $this->cacher->get($key, $default);
+	} //cacheGet()
+
+	public function cacheSet($key, $value, $ttl = null) {
+		return $this->cacher->set($key, $value, $ttl);
+	} //cacheSet()
+
+	public function cacheRemove($key) {
+		return $this->cacher->remove($key);
+	} //cacheRemove($key)
+
 	static protected function privateInclude($__filename, array $__locals = [ ]) {
 		foreach ($__locals as $__k => $__v)
 			$$__k = $__v;
@@ -142,20 +178,11 @@ class App {
 		return $res;
 	} //privateInclude()
 
-	public function dispatch($reqURI) {
-		$reqInfo = Action::resolve($this, $reqURI);
-		$handler = $reqInfo['handler'];
-		$req = new $handler($this, $reqInfo);
-		//#TODO: Support cache-fetch here
-		$req->execute();
-		//#TODO: Support cache-store here
-		return $req;
-	} //reqURI
-
 	protected function loadCore() {
 		require $this->appDir . 'lib/Util.class.php';
 		require $this->appDir . 'lib/Action.class.php';
-		//require $this->appDir . 'lib/CacheDriver.class.php';
+		require $this->appDir . 'lib/CacheDriver.class.php';
+		require $this->appDir . 'lib/NullCache.class.php';
 		require $this->appDir . 'lib/ServiceDriver.class.php';
 	} //loadCore()
 
@@ -193,7 +220,7 @@ class App {
 
 	protected function loadDrivers() {
 		ServiceDriver::loadAll($this, $this->appDir . 'drivers/service/');
-		//CacheDriver::loadAll($this->appDir . 'drivers/cache/');
+		CacheDriver::loadAll($this, $this->appDir . 'drivers/cache/');
 	} //loadDrivers()
 } //class App
 

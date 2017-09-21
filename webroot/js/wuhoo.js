@@ -24,7 +24,6 @@ function setWorking() {
 	wuhoo.zipEl.setAttribute('disabled', 'disabled');
 	wuhoo.submitEl.setAttribute('disabled', 'disabled');
 
-	wuhoo.resultsEl.style.display = 'none';
 	wuhoo.workingEl.style.display = 'block';
 }
 
@@ -35,7 +34,6 @@ function clearWorking() {
 	wuhoo.submitEl.removeAttribute('disabled');
 
 	wuhoo.workingEl.style.display = 'none';
-	wuhoo.resultsEl.style.display = 'block';
 
 	wuhoo.working = false;
 }
