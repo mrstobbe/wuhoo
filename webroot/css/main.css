@@ -83,4 +83,16 @@ p {
 	color: #444;
 }
 
+#results {
+	display: none;
+}
+
+#results.active {
+	display: block;
+}
+
+#results .current-temp {
+	font-size: 400%;
+	text-align: center;
+}
 

@@ -50,7 +50,10 @@ $zip = $resp->param('zip');
 		</div>
 	</form>
 	<div id="working" style="display: none;">Working... please wait.</div>
-	<div id="results"><?php /* #TODO: results partial */ ?></div>
+	<div id="results">
+		<h2 class="current-temp"><span id="curTemp">?</span><sup>&#176;</sup>F</h2>
+		<div id="hourly">Hourly forecast is unavailable with your selected provider.</div>
+	</div>
 	</article>
 	<script>wuhoo.init();</script>
 </body>

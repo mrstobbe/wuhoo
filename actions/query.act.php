@@ -30,11 +30,34 @@ class QueryAction extends Action {
 		$providers = ServiceDriver::getList();
 		
 		$all = [ ];
+		$withHourly = true;
 		foreach ($providers as $id=>$name) {
 			if (($all[$id] = $this->getResults($id, $zip)) === null)
 				return $this->respError(500, 'Provider API failure');
+			if (!isset($all[$id]['hourly']))
+				$withHourly = false;
 		}
-		return $this->respError(500, 'Stubbed');
+		$hourly = null;
+		$current = 0;
+		foreach ($providers as $id=>$name)
+			$current += $all[$id]['current'];
+		$current /= count($all);
+		if ($withHourly) {
+			$hourly = [ ];
+			for ($i = 0; $i !== 24; ++$i)
+				$hourly[$i] = 0;
+			foreach ($providers as $id=>$name) {
+				foreach ($all[$id]['hourly'] as $i=>$temp)
+					$hourly[$i] += $temp;
+			}
+			foreach ($hourly as $i=>$temp)
+				$hourly[$i] /= count($all);
+		}
+		$res = [ 'when'=>time(), 'current'=>$current ];
+		if ($hourly !== null)
+			$res['hourly'] = $hourly;
+		$res['provider'] = 'mean';
+		return $this->respSuccess($res);
 	} //getMean()
 
 	public function getSpecific($provider, $zip) {
