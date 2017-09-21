@@ -112,7 +112,7 @@ function handleSubmit(e) {
 
 wuhoo.init = function() {
 	if (!String.prototype.trim)
-		String.prototype.type = function() { return this.replace(/^\s+/, '').replace(/\s+$/, '') };
+		String.prototype.trim = function() { return this.replace(/^\s+/, '').replace(/\s+$/, '') };
 
 
 	wuhoo.formEl = dom.getElementById('frmQuery');
